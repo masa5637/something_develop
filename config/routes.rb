@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'sessions/new'
+  devise_for :users
   get 'home/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -15,4 +15,6 @@ Rails.application.routes.draw do
   post '/login',  to: 'sessions#create'
 
   resources :battle, only: [:show]
+
+  resources :lobby, only: [:index]
 end
