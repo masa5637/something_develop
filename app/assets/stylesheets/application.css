@@ -416,3 +416,750 @@
 .btn-login:hover {
   border-color: #c9b87a;
 }
+.btn-login {
+  text-decoration: none;
+}
+/* ===========================
+   ARCANA Card Battle — Login
+   =========================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Crimson Pro', serif;
+  background: #0f0e15;
+  color: #e8e0d0;
+}
+
+/* ---- Page layout ---- */
+
+.pg {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+/* ---- Logo ---- */
+
+.logo {
+  font-family: 'Cinzel', serif;
+  font-size: 32px;
+  letter-spacing: 0.15em;
+  color: #c9b87a;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.logo-sub {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: #6b6080;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+/* ---- Form wrapper ---- */
+
+.form-wrapper {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* ---- Tabs ---- */
+
+.tabs {
+  display: flex;
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 28px;
+  width: 100%;
+}
+
+.tab {
+  flex: 1;
+  padding: 11px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  background: transparent;
+  color: #6b6080;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.tab.active {
+  background: #1e1a3a;
+  color: #c9b87a;
+}
+
+/* ---- Card ---- */
+
+.card {
+  background: #17152a;
+  border: 1px solid #2a2540;
+  border-radius: 6px;
+  padding: 28px 28px 24px;
+  width: 100%;
+}
+
+/* ---- Form fields ---- */
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: #6b6080;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-family: 'Cinzel', serif;
+}
+
+.field input {
+  width: 100%;
+  background: #0f0e15;
+  border: 1px solid #2a2540;
+  border-radius: 3px;
+  padding: 10px 12px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 15px;
+  color: #e8e0d0;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.field input:focus {
+  border-color: rgba(201, 184, 122, 0.35);
+}
+
+.field input::placeholder {
+  color: #3a3060;
+}
+
+/* ---- Buttons ---- */
+
+.btn-main {
+  width: 100%;
+  padding: 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  background: #c9b87a;
+  color: #0f0e15;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 4px;
+  transition: opacity 0.15s;
+}
+
+.btn-main:hover {
+  opacity: 0.85;
+}
+
+.btn-guest {
+  width: 100%;
+  padding: 11px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  background: transparent;
+  color: #6b6080;
+  border: 1px solid #2a2540;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-guest:hover {
+  border-color: #3a3060;
+  color: #c9b87a;
+}
+
+/* ---- Divider ---- */
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: #2a2540;
+}
+
+.divider-text {
+  font-size: 11px;
+  color: #3a3060;
+  letter-spacing: 0.2em;
+}
+
+/* ---- Bottom note ---- */
+
+.note {
+  font-size: 12px;
+  color: #3a3060;
+  text-align: center;
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* ---- Register-only fields (toggled via JS) ---- */
+
+.register-only {
+  display: none;
+}
+a.logo {
+  text-decoration: none;
+}
+/* ===========================
+   ARCANA Card Battle — Battle
+   =========================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Crimson Pro', serif;
+  background: #0f0e15;
+  color: #e8e0d0;
+  user-select: none;
+}
+
+/* ---- Page layout ---- */
+
+.pg {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Top bar ---- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #1a1830;
+}
+
+.topbar-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  color: #c9b87a;
+  text-decoration: none;
+}
+
+.turn-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: #6b6080;
+  padding: 5px 14px;
+  border: 1px solid #2a2540;
+  border-radius: 2px;
+}
+
+.turn-badge.my-turn {
+  color: #c9b87a;
+  border-color: rgba(201, 184, 122, 0.27);
+}
+
+.end-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  padding: 6px 16px;
+  background: transparent;
+  color: #6b6080;
+  border: 1px solid #2a2540;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.end-btn:hover {
+  color: #c9b87a;
+  border-color: rgba(201, 184, 122, 0.27);
+}
+
+/* ---- Field ---- */
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 14px;
+  gap: 5px;
+}
+
+/* ---- Player strip ---- */
+
+.player-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #251f45;
+  border: 1px solid #2a2540;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: #c9b87a;
+  flex-shrink: 0;
+}
+
+.player-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.pname {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: #e8e0d0;
+  letter-spacing: 0.1em;
+  margin-bottom: 3px;
+}
+
+.hp-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hp-bar-bg {
+  flex: 1;
+  height: 4px;
+  background: #1a1830;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.hp-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.4s;
+}
+
+.hp-bar-fill.high { background: #3a8a4a; }
+.hp-bar-fill.mid  { background: #a08030; }
+.hp-bar-fill.low  { background: #8a3a3a; }
+
+.hp-num {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: #6b6080;
+  white-space: nowrap;
+}
+
+/* ---- Zone blocks ---- */
+
+.zone-block {
+  border-radius: 5px;
+  padding: 5px 8px 7px;
+}
+
+.zone-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.zone-cards {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.field-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.monster-block {
+  background: #17152a;
+  border: 1px solid #2a2540;
+}
+
+.monster-block .zone-label { color: #3a3060; }
+
+.spell-block {
+  background: #12102a;
+  border: 1px solid #2a2540;
+}
+
+.spell-block .zone-label { color: #4a3080; }
+
+/* 相手フィールドを180度回転 */
+.enemy-col {
+  transform: rotate(180deg);
+}
+
+.enemy-col .zone-label {
+  transform: rotate(180deg);
+  display: block;
+}
+
+/* ---- Monster cards (on field) ---- */
+
+.fcard {
+  flex-shrink: 0;
+  width: 68px;
+  height: 96px;
+  background: linear-gradient(160deg, #1e1a3a, #251f45);
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.12s;
+}
+
+.fcard:hover {
+  transform: translateY(-3px);
+  border-color: rgba(201, 184, 122, 0.33);
+}
+
+.fcard-img {
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(160deg, #1e1a3a, #2a2350);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Railsで画像を使う場合は .fcard-img に <img> タグを入れてください */
+.fcard-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fcard-rune {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  color: #3a3060;
+}
+
+.fcard-footer {
+  padding: 3px 4px;
+  background: #13112a;
+}
+
+.fcard-name {
+  font-family: 'Cinzel', serif;
+  font-size: 6px;
+  color: #c9b87a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.fcard-stats {
+  display: flex;
+  gap: 3px;
+}
+
+.fstat {
+  font-size: 6px;
+  font-family: 'Cinzel', serif;
+}
+
+.fstat.a { color: #d4736a; }
+.fstat.d { color: #6a9fd4; }
+
+/* ---- Spell slots (on field) ---- */
+
+.scard {
+  flex-shrink: 0;
+  width: 68px;
+  height: 60px;
+  border: 1px dashed #2a2540;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.scard:hover {
+  border-color: rgba(122, 80, 192, 0.27);
+  background: #1a1535;
+}
+
+.scard.filled {
+  border-style: solid;
+  border-color: #3a2a60;
+  background: linear-gradient(160deg, #1a1535, #221845);
+}
+
+.scard-icon {
+  font-size: 18px;
+  color: #2a2050;
+}
+
+.scard.filled .scard-icon { color: #7a50c0; }
+
+.scard-label {
+  font-family: 'Cinzel', serif;
+  font-size: 6px;
+  color: #3a2a60;
+  text-align: center;
+  padding: 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
+}
+
+.scard.filled .scard-label { color: #9a70e0; }
+
+.scard-plus {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  color: #2a2050;
+}
+
+/* ---- Empty monster slot ---- */
+
+.empty-slot {
+  flex-shrink: 0;
+  width: 68px;
+  height: 96px;
+  border: 1px dashed #2a2540;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #2a2540;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.empty-slot:hover {
+  border-color: rgba(201, 184, 122, 0.27);
+  color: rgba(201, 184, 122, 0.27);
+}
+
+/* ---- VS bar ---- */
+
+.vs-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vs-line {
+  flex: 1;
+  height: 1px;
+  background: #2a2540;
+}
+
+.vs-txt {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: #2a2540;
+  letter-spacing: 0.4em;
+}
+
+/* ---- Log strip ---- */
+
+.log-strip {
+  background: #17152a;
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  padding: 5px 12px;
+  font-size: 11px;
+  color: #6b6080;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.log-strip span    { color: #c9b87a; }
+.log-strip span.sp { color: #9a70e0; }
+
+/* ---- Hand area ---- */
+
+.hand-area {
+  border-top: 1px solid #1a1830;
+  padding: 8px 14px 12px;
+}
+
+.hand-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 0.35em;
+  color: #3a3060;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.hand-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  justify-content: center;
+}
+
+/* ---- Hand cards ---- */
+
+.hcard {
+  flex-shrink: 0;
+  width: 78px;
+  height: 110px;
+  background: linear-gradient(160deg, #1e1a3a, #251f45);
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.hcard:hover         { transform: translateY(-6px);  border-color: rgba(201, 184, 122, 0.33); }
+.hcard.selected      { transform: translateY(-10px); border-color: #c9b87a; }
+.hcard.spell-card    { border-color: #2a2050; }
+.hcard.spell-card:hover   { border-color: rgba(122, 80, 192, 0.33); }
+.hcard.spell-card.selected { border-color: #9a70e0; transform: translateY(-10px); }
+
+.hcard-img {
+  width: 100%;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Railsで画像を使う場合は .hcard-img に <img> タグを入れてください */
+.hcard-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hcard-img.monster { background: linear-gradient(160deg, #1e1a3a, #2a2350); }
+.hcard-img.spell   { background: linear-gradient(160deg, #12102a, #1a1535); }
+
+.hcard-rune {
+  font-family: 'Cinzel', serif;
+  font-size: 26px;
+  color: #3a3060;
+}
+
+.hcard-rune.sp { color: #3a2a60; }
+
+.hcard-footer {
+  padding: 4px 5px;
+  flex: 1;
+}
+
+.hcard-footer.monster { background: #13112a; }
+.hcard-footer.spell   { background: #110f25; }
+
+.hcard-name {
+  font-family: 'Cinzel', serif;
+  font-size: 7px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.hcard-name.m { color: #c9b87a; }
+.hcard-name.s { color: #9a70e0; }
+
+.hcard-type {
+  font-size: 6px;
+  color: #5a4090;
+  font-family: 'Cinzel', serif;
+}
+
+.hcard-stats {
+  display: flex;
+  gap: 3px;
+}
+
+.hstat { font-size: 7px; font-family: 'Cinzel', serif; }
+.hstat.a { color: #d4736a; }
+.hstat.d { color: #6a9fd4; }
+
+/* ---- Action buttons ---- */
+
+.action-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 7px;
+}
+
+.play-btn {
+  display: none;
+  flex: 1;
+  padding: 8px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  background: #c9b87a;
+  color: #0f0e15;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: opacity 0.15s;
+}
+
+.play-btn.spell {
+  background: #7a50c0;
+  color: #e8e0d0;
+}
+
+.play-btn.visible { display: block; }
+.play-btn:hover   { opacity: 0.85; }

@@ -1,0 +1,169 @@
+<div class="pg">
+
+    <!-- トップバー -->
+    <div class="topbar">
+      <a href="/" class="topbar-logo">ARCANA</a>
+      <div class="turn-badge my-turn" id="turn-badge">あなたのターン</div>
+      <button class="end-btn" onclick="endTurn()">ターン終了</button>
+    </div>
+
+    <div class="field">
+
+      <!-- 相手プレイヤー -->
+      <div class="player-strip">
+        <div class="avatar">P2</div>
+        <div class="player-meta">
+          <div class="pname">相手プレイヤー</div>
+          <div class="hp-row">
+            <div class="hp-bar-bg">
+              <div class="hp-bar-fill low" id="p2-bar" style="width: 38%"></div>
+            </div>
+            <div class="hp-num" id="p2-hp">38 / 100</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 相手フィールド（180度回転） -->
+      <div class="field-col enemy-col">
+        <div class="zone-block monster-block">
+          <div class="zone-label">相手 モンスターゾーン</div>
+          <div class="zone-cards">
+            <div class="fcard">
+              <div class="fcard-img"><span class="fcard-rune">◈</span></div>
+              <div class="fcard-footer">
+                <div class="fcard-name">氷壁の騎士</div>
+                <div class="fcard-stats">
+                  <span class="fstat a">A:40</span>
+                  <span class="fstat d">D:88</span>
+                </div>
+              </div>
+            </div>
+            <div class="empty-slot">+</div>
+            <div class="empty-slot">+</div>
+            <div class="empty-slot">+</div>
+            <div class="empty-slot">+</div>
+          </div>
+        </div>
+        <div class="zone-block spell-block">
+          <div class="zone-label">相手 魔法・罠ゾーン</div>
+          <div class="zone-cards">
+            <div class="scard filled">
+              <span class="scard-icon">✦</span>
+              <span class="scard-label">伏せカード</span>
+            </div>
+            <div class="scard"><span class="scard-plus">+</span></div>
+            <div class="scard"><span class="scard-plus">+</span></div>
+            <div class="scard"><span class="scard-plus">+</span></div>
+            <div class="scard"><span class="scard-plus">+</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VS -->
+      <div class="vs-bar">
+        <div class="vs-line"></div>
+        <div class="vs-txt">VS</div>
+        <div class="vs-line"></div>
+      </div>
+
+      <!-- ログ -->
+      <div class="log-strip" id="log">
+        カードを選んで<span>モンスター召喚</span>か<span class="sp">魔法発動</span>してください
+      </div>
+
+      <!-- 自分フィールド -->
+      <div class="field-col">
+        <div class="zone-block monster-block">
+          <div class="zone-label">モンスターゾーン</div>
+          <div class="zone-cards">
+            <div class="fcard">
+              <div class="fcard-img"><span class="fcard-rune">⬡</span></div>
+              <div class="fcard-footer">
+                <div class="fcard-name">炎の番人</div>
+                <div class="fcard-stats">
+                  <span class="fstat a">A:72</span>
+                  <span class="fstat d">D:35</span>
+                </div>
+              </div>
+            </div>
+            <div class="empty-slot" id="ms1" onclick="placeMonster(1)">+</div>
+            <div class="empty-slot" id="ms2" onclick="placeMonster(2)">+</div>
+            <div class="empty-slot" id="ms3" onclick="placeMonster(3)">+</div>
+            <div class="empty-slot" id="ms4" onclick="placeMonster(4)">+</div>
+          </div>
+        </div>
+        <div class="zone-block spell-block">
+          <div class="zone-label">魔法・罠ゾーン</div>
+          <div class="zone-cards" id="my-spell-zone">
+            <div class="scard" id="sz0" onclick="placeSpell(0)"><span class="scard-plus">+</span></div>
+            <div class="scard" id="sz1" onclick="placeSpell(1)"><span class="scard-plus">+</span></div>
+            <div class="scard" id="sz2" onclick="placeSpell(2)"><span class="scard-plus">+</span></div>
+            <div class="scard" id="sz3" onclick="placeSpell(3)"><span class="scard-plus">+</span></div>
+            <div class="scard" id="sz4" onclick="placeSpell(4)"><span class="scard-plus">+</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 自分プレイヤー -->
+      <div class="player-strip">
+        <div class="avatar">P1</div>
+        <div class="player-meta">
+          <div class="pname">あなた</div>
+          <div class="hp-row">
+            <div class="hp-bar-bg">
+              <div class="hp-bar-fill high" id="p1-bar" style="width: 80%"></div>
+            </div>
+            <div class="hp-num" id="p1-hp">80 / 100</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 手札 -->
+    <div class="hand-area">
+      <div class="hand-label">手札</div>
+      <div class="hand-row">
+        <div class="hcard" id="hc-shadow" onclick="selectCard('shadow')">
+          <div class="hcard-img monster"><span class="hcard-rune">✦</span></div>
+          <div class="hcard-footer monster">
+            <div class="hcard-name m">影の刺客</div>
+            <div class="hcard-stats">
+              <span class="hstat a">A:95</span>
+              <span class="hstat d">D:20</span>
+            </div>
+          </div>
+        </div>
+        <div class="hcard" id="hc-thunder" onclick="selectCard('thunder')">
+          <div class="hcard-img monster"><span class="hcard-rune">⚡</span></div>
+          <div class="hcard-footer monster">
+            <div class="hcard-name m">雷神の剣</div>
+            <div class="hcard-stats">
+              <span class="hstat a">A:60</span>
+              <span class="hstat d">D:50</span>
+            </div>
+          </div>
+        </div>
+        <div class="hcard spell-card" id="hc-fire" onclick="selectCard('fire')">
+          <div class="hcard-img spell"><span class="hcard-rune sp">🔥</span></div>
+          <div class="hcard-footer spell">
+            <div class="hcard-name s">炎の魔法</div>
+            <div class="hcard-type">魔法カード</div>
+          </div>
+        </div>
+        <div class="hcard spell-card" id="hc-shield" onclick="selectCard('shield')">
+          <div class="hcard-img spell"><span class="hcard-rune sp">🛡</span></div>
+          <div class="hcard-footer spell">
+            <div class="hcard-name s">鉄壁の守護</div>
+            <div class="hcard-type">魔法カード</div>
+          </div>
+        </div>
+      </div>
+      <div class="action-row">
+        <button class="play-btn" id="play-monster-btn" onclick="playMonster()">モンスター召喚</button>
+        <button class="play-btn spell" id="play-spell-btn" onclick="playSpell()">魔法を発動</button>
+      </div>
+    </div>
+
+  </div>
+<%= javascript_import_module_tag "battle" %>
