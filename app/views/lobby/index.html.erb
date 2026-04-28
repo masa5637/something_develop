@@ -1,0 +1,84 @@
+  <div class="pg">
+
+    <div class="topbar">
+      <a href="/" class="topbar-logo">ARCANA</a>
+      <div class="topbar-user">ようこそ、召喚師</div>
+    </div>
+
+    <div class="lobby">
+      <div class="lobby-title">対戦モードを選択</div>
+
+      <!-- モード選択 -->
+      <div class="mode-cards" id="mode-cards">
+        <div class="mode-card" onclick="showPanel('cpu')">
+          <div class="mode-icon cpu">🤖</div>
+          <div class="mode-meta">
+            <div class="mode-name">CPU対戦</div>
+            <div class="mode-desc">難易度を選んでCPUと戦う</div>
+          </div>
+          <div class="mode-arrow">›</div>
+        </div>
+        <div class="mode-card" onclick="showPanel('online')">
+          <div class="mode-icon online">⚔️</div>
+          <div class="mode-meta">
+            <div class="mode-name">オンライン対戦</div>
+            <div class="mode-desc">部屋を作ってコードで招待</div>
+          </div>
+          <div class="mode-arrow">›</div>
+        </div>
+      </div>
+
+      <!-- CPU難易度パネル -->
+      <div class="panel" id="cpu-panel">
+        <div class="panel-title">難易度を選択</div>
+        <div class="difficulty-row">
+          <div class="diff-btn easy" onclick="selectDiff(this)">弱</div>
+          <div class="diff-btn mid"  onclick="selectDiff(this)">中</div>
+          <div class="diff-btn hard" onclick="selectDiff(this)">強</div>
+        </div>
+        <button class="start-btn" id="start-cpu-btn">対戦開始</button>
+        <button class="back-btn" onclick="hidePanel('cpu')">← 戻る</button>
+      </div>
+
+      <!-- オンライン対戦パネル -->
+      <div class="panel" id="online-panel">
+        <div class="room-tabs">
+          <button class="room-tab active" id="tab-create" onclick="switchRoomTab('create')">部屋を作る</button>
+          <button class="room-tab" id="tab-join" onclick="switchRoomTab('join')">部屋に入る</button>
+        </div>
+
+        <!-- 部屋作成 -->
+        <div class="room-create visible" id="room-create">
+          <div class="room-code-display">
+            <div class="room-code" id="room-code">----</div>
+            <div class="room-code-label">ルームコード</div>
+          </div>
+          <button class="copy-btn" onclick="copyCode()">コードをコピー</button>
+          <div class="waiting">相手の参加を<span>待機中</span>…</div>
+        </div>
+
+        <!-- 部屋参加 -->
+        <div class="room-join" id="room-join">
+          <input
+            class="input-field"
+            id="code-input"
+            placeholder="ルームコードを入力"
+            maxlength="4"
+            oninput="this.value=this.value.toUpperCase()"
+          />
+          <button class="join-btn">参加する</button>
+        </div>
+
+        <button class="back-btn" onclick="hidePanel('online')">← 戻る</button>
+      </div>
+
+      <!-- 下部ボタン -->
+      <div class="bottom-btns">
+        <button class="btn-deck" onclick="location.href='/cards'">🃏 カードを編集する</button>
+        <button class="btn-home" onclick="location.href='/'">← ホームに戻る</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>

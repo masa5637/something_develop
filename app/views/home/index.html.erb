@@ -2,11 +2,15 @@
 <div class="hero">
   <div class="hero-bg"></div>
   <div class="hero-deco"></div>
-  <%= link_to "ログイン", login_path, class: "btn-login" %>
+  <% if user_signed_in? %>
+    <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn-login" %>
+  <% else %>
+    <%= link_to "ログイン", new_user_session_path, class: "btn-login" %>
+  <% end %>
   <div class="logo">ARCANA</div>
   <div class="logo-sub">Card Battle</div>
   <div class="hero-btns">
-    <button class="btn-primary">対戦を始める</button>
+    <%= link_to "対戦を始める", lobby_index_path, class: "btn-primary" %>
     <button class="btn-secondary">デッキを編集</button>
   </div>
 </div>

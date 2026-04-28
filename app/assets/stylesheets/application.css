@@ -1163,3 +1163,388 @@ body {
 
 .play-btn.visible { display: block; }
 .play-btn:hover   { opacity: 0.85; }
+a {
+  text-decoration: none;
+}
+/* ===========================
+   ARCANA Card Battle — Lobby
+   =========================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Crimson Pro', serif;
+  background: #0f0e15;
+  color: #e8e0d0;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* ---- Page layout ---- */
+
+.pg {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Top bar ---- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-bottom: 1px solid #1a1830;
+}
+
+.topbar-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  color: #c9b87a;
+}
+
+.topbar-user {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: #6b6080;
+  letter-spacing: 0.15em;
+}
+
+/* ---- Lobby ---- */
+
+.lobby {
+  flex: 1;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.lobby-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  color: #6b6080;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ---- Mode cards ---- */
+
+.mode-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mode-card {
+  background: #17152a;
+  border: 1px solid #2a2540;
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mode-card:hover {
+  border-color: rgba(201, 184, 122, 0.27);
+  background: #1e1a3a;
+}
+
+.mode-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.mode-icon.cpu    { background: #1e1a3a; border: 1px solid #3a3060; }
+.mode-icon.online { background: #1a1535; border: 1px solid #3a2a60; }
+
+.mode-meta { flex: 1; }
+
+.mode-name {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  color: #e8e0d0;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.mode-desc {
+  font-size: 12px;
+  color: #6b6080;
+}
+
+.mode-arrow {
+  font-size: 18px;
+  color: #3a3060;
+}
+
+/* ---- Panel ---- */
+
+.panel {
+  display: none;
+  background: #13112a;
+  border: 1px solid #2a2540;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.panel.visible { display: block; }
+
+.panel-title {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: #6b6080;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+/* ---- Difficulty ---- */
+
+.difficulty-row {
+  display: flex;
+  gap: 10px;
+}
+
+.diff-btn {
+  flex: 1;
+  padding: 12px 8px;
+  background: transparent;
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: #6b6080;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+}
+
+.diff-btn.easy:hover,
+.diff-btn.easy.active { border-color: #3a8a4a; color: #5cb56e; background: #0f1a12; }
+
+.diff-btn.mid:hover,
+.diff-btn.mid.active  { border-color: #a08030; color: #c9b87a; background: #1a1500; }
+
+.diff-btn.hard:hover,
+.diff-btn.hard.active { border-color: #8a3a3a; color: #d4736a; background: #1a0f0f; }
+
+.start-btn {
+  display: none;
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  background: #c9b87a;
+  color: #0f0e15;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: opacity 0.15s;
+}
+
+.start-btn.visible { display: block; }
+.start-btn:hover   { opacity: 0.85; }
+
+/* ---- Room tabs ---- */
+
+.room-tabs {
+  display: flex;
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.room-tab {
+  flex: 1;
+  padding: 9px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  background: transparent;
+  color: #6b6080;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.room-tab.active {
+  background: #1e1a3a;
+  color: #c9b87a;
+}
+
+/* ---- Room create / join ---- */
+
+.room-create,
+.room-join { display: none; }
+
+.room-create.visible,
+.room-join.visible   { display: block; }
+
+.room-code-display {
+  background: #0f0e15;
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.room-code {
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  letter-spacing: 0.4em;
+  color: #c9b87a;
+}
+
+.room-code-label {
+  font-size: 11px;
+  color: #6b6080;
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+}
+
+.copy-btn {
+  width: 100%;
+  padding: 10px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  background: transparent;
+  color: #c9b87a;
+  border: 1px solid #3a3060;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: border-color 0.15s;
+}
+
+.copy-btn:hover { border-color: #c9b87a; }
+
+.waiting {
+  font-size: 12px;
+  color: #6b6080;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+.waiting span { color: #c9b87a; }
+
+.input-field {
+  width: 100%;
+  background: #0f0e15;
+  border: 1px solid #2a2540;
+  border-radius: 3px;
+  padding: 10px 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  letter-spacing: 0.3em;
+  color: #e8e0d0;
+  outline: none;
+  text-align: center;
+  margin-bottom: 12px;
+  transition: border-color 0.15s;
+}
+
+.input-field:focus       { border-color: rgba(201, 184, 122, 0.27); }
+.input-field::placeholder { color: #3a3060; font-size: 13px; letter-spacing: 0.1em; }
+
+.join-btn {
+  width: 100%;
+  padding: 12px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  background: #7a50c0;
+  color: #e8e0d0;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 700;
+  transition: opacity 0.15s;
+}
+
+.join-btn:hover { opacity: 0.85; }
+
+.back-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #3a3060;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  margin-top: 8px;
+  transition: color 0.15s;
+}
+
+.back-btn:hover { color: #6b6080; }
+
+/* ---- Bottom buttons ---- */
+
+.bottom-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.btn-deck {
+  width: 100%;
+  padding: 13px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  background: transparent;
+  color: #c9b87a;
+  border: 1px solid #3a3060;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.btn-deck:hover { border-color: #c9b87a; }
+
+.btn-home {
+  width: 100%;
+  padding: 13px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  background: transparent;
+  color: #6b6080;
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.btn-home:hover { color: #e8e0d0; border-color: #3a3060; }

@@ -1,0 +1,35 @@
+<div class="pg">
+  <a href="/" class="logo">ARCANA</a>
+  <div class="logo-sub">Card Battle</div>
+
+  <div class="form-wrapper">
+    <div class="tabs">
+      <div class="tab active">ログイン</div>
+      <a href="<%= new_user_registration_path %>" class="tab">新規登録</a>
+    </div>
+
+    <div class="card">
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="field">
+          <label>メールアドレス</label>
+          <%= f.email_field :email, placeholder: "your@email.com" %>
+        </div>
+
+        <div class="field">
+          <label>パスワード</label>
+          <%= f.password_field :password, placeholder: "••••••••" %>
+        </div>
+
+        <%= f.submit "ログイン", class: "btn-main" %>
+      <% end %>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <div class="divider-text">OR</div>
+        <div class="divider-line"></div>
+      </div>
+
+      <a href="<%= new_user_registration_path %>" class="btn-guest">新規登録はこちら</a>
+    </div>
+  </div>
+</div>
