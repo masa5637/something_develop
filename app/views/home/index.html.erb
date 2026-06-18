@@ -19,9 +19,9 @@
 <div class="section">
   <div class="section-title">マイカード</div>
   <div class="cards-row">
-    <button class="new-card-btn">
+    <%= link_to new_card_path, class: "new-card-btn" do %>
       <div class="plus-icon">+</div>
       カードを追加
-    </button>
+    <% end %>
   </div>
 </div>

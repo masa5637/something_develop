@@ -1548,3 +1548,12 @@ a {
 }
 
 .btn-home:hover { color: #e8e0d0; border-color: #3a3060; }
+
+.card-img-tag { width: 100%; height: 100%; object-fit: cover; }
+.card-actions { display: flex; gap: 8px; margin-top: 8px; }
+.card-edit-link, .card-delete-btn { flex: 1; font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 0.1em; padding: 6px; text-align: center; border-radius: 3px; cursor: pointer; border: 1px solid #2a2540; background: transparent; color: #6b6080; }
+.card-edit-link:hover { color: #c9b87a; border-color: #c9b87a44; }
+.card-delete-btn:hover { color: #d4736a; border-color: #d4736a44; }
+.form-area { padding: 32px 24px; max-width: 400px; margin: 0 auto; }
+.card-form { background: #17152a; border: 1px solid #2a2540; border-radius: 8px; padding: 24px; margin-top: 16px; }
+.current-image-preview { width: 100%; max-height: 150px; object-fit: cover; border-radius: 4px; margin-top: 4px; }

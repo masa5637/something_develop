@@ -1,0 +1,41 @@
+<div class="pg">
+  <div class="topbar">
+    <a href="/" class="topbar-logo">ARCANA</a>
+    <%= link_to "← ロビーに戻る", lobby_index_path, class: "btn-home" %>
+  </div>
+
+  <div class="section">
+    <div class="section-title">マイカード</div>
+    <div class="cards-row">
+
+      <% @cards.each do |card| %>
+        <div class="card">
+          <div class="card-img">
+            <% if card.image.attached? %>
+              <%= image_tag card.image, class: "card-img-tag" %>
+            <% else %>
+              <span class="card-rune">⬡</span>
+            <% end %>
+          </div>
+          <div class="card-body">
+            <div class="card-name"><%= card.name %></div>
+            <div class="card-stats">
+              <div class="stat"><span class="stat-label">ATK</span><span class="stat-val atk"><%= card.attack %></span></div>
+              <div class="stat"><span class="stat-label">DEF</span><span class="stat-val def"><%= card.defense %></span></div>
+            </div>
+            <div class="card-actions">
+              <%= link_to "編集", edit_card_path(card), class: "card-edit-link" %>
+              <%= button_to "削除", card, method: :delete, class: "card-delete-btn", form: { data: { turbo_confirm: "本当に削除しますか？" } } %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%= link_to new_card_path, class: "new-card-btn" do %>
+        <div class="plus-icon">+</div>
+        カードを追加
+      <% end %>
+
+    </div>
+  </div>
+</div>

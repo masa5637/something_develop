@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get 'cards/index'
+  get 'cards/new'
+  get 'cards/create'
+  get 'cards/edit'
+  get 'cards/update'
+  get 'cards/destroy'
   devise_for :users
   get 'home/index'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -17,4 +23,6 @@ Rails.application.routes.draw do
   resources :battle, only: [:show]
 
   resources :lobby, only: [:index]
+
+  resources :cards
 end
