@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_06_16_131142) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_19_120729) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -49,6 +49,11 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_16_131142) do
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "card_type"
+    t.integer "tier"
+    t.string "effect_target"
+    t.string "effect_action"
+    t.integer "effect_value"
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
 

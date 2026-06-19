@@ -40,6 +40,6 @@ class CardsController < ApplicationController
   end
 
   def card_params
-    params.require(:card).permit(:name, :attack, :defense, :image)
+    params.require(:card).permit(:name, :card_type, :image, :tier, :attack, :defense, :effect_target, :effect_action, :effect_value)
   end
 end

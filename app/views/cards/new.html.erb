@@ -7,25 +7,75 @@
     <div class="lobby-title">カードを作成</div>
 
     <%= form_with model: @card, local: true do |f| %>
+
+      <% if @card.errors.any? %>
+        <div class="error-messages" style="color:#d4736a; margin-bottom:12px;">
+          <ul>
+            <% @card.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
       <div class="card-form">
+
+        <!-- カードタイプ選択 -->
+        <div class="field">
+          <label>カードタイプ</label>
+          <div class="type-tabs">
+            <label class="type-tab">
+              <%= f.radio_button :card_type, "monster", checked: true, onchange: "toggleCardType('monster')" %>
+              モンスター
+            </label>
+            <label class="type-tab">
+              <%= f.radio_button :card_type, "spell", onchange: "toggleCardType('spell')" %>
+              魔法
+            </label>
+          </div>
+        </div>
+
         <div class="field">
           <label>カード名</label>
           <%= f.text_field :name, placeholder: "例: 炎の番人" %>
         </div>
 
         <div class="field">
-          <label>攻撃力 (ATK)</label>
-          <%= f.number_field :attack, placeholder: "0〜100" %>
-        </div>
-
-        <div class="field">
-          <label>防御力 (DEF)</label>
-          <%= f.number_field :defense, placeholder: "0〜100" %>
-        </div>
-
-        <div class="field">
           <label>カード画像</label>
           <%= f.file_field :image, accept: "image/*" %>
+        </div>
+
+        <!-- モンスター専用フィールド -->
+        <div id="monster-fields">
+          <div class="field">
+            <label>族（攻守合計）</label>
+            <%= f.select :tier, Card::TIERS.map { |t| ["#{t}族", t] }, {}, { id: "tier-select", onchange: "validateStats()" } %>
+          </div>
+          <div class="field">
+            <label>攻撃力 (ATK)</label>
+            <%= f.number_field :attack, id: "attack-input", oninput: "validateStats()" %>
+          </div>
+          <div class="field">
+            <label>防御力 (DEF)</label>
+            <%= f.number_field :defense, id: "defense-input", oninput: "validateStats()" %>
+          </div>
+          <div class="stat-warning" id="stat-warning"></div>
+        </div>
+
+        <!-- 魔法専用フィールド -->
+        <div id="spell-fields" style="display:none;">
+          <div class="field">
+            <label>対象</label>
+            <%= f.select :effect_target, Card::EFFECT_TARGETS.map { |k, v| [v, k] }, { include_blank: "選択してください" } %>
+          </div>
+          <div class="field">
+            <label>効果</label>
+            <%= f.select :effect_action, Card::EFFECT_ACTIONS.map { |k, v| [v, k] }, { include_blank: "選択してください" }, { id: "effect-action-select", onchange: "toggleValueField()" } %>
+          </div>
+          <div class="field" id="effect-value-field" style="display:none;">
+            <label>数値</label>
+            <%= f.number_field :effect_value, placeholder: "例: 30" %>
+          </div>
         </div>
 
         <%= f.submit "カードを作成", class: "btn-main" %>
@@ -35,3 +85,34 @@
     <%= link_to "← 戻る", cards_path, class: "back-btn" %>
   </div>
 </div>
+
+<script>
+var actionsRequireValue = ["damage", "heal", "atk_up", "atk_down"];
+
+function toggleValueField() {
+  var action = document.getElementById('effect-action-select').value;
+  var field = document.getElementById('effect-value-field');
+  field.style.display = actionsRequireValue.includes(action) ? 'block' : 'none';
+}
+
+function toggleCardType(type) {
+  document.getElementById('monster-fields').style.display = type === 'monster' ? 'block' : 'none';
+  document.getElementById('spell-fields').style.display = type === 'spell' ? 'block' : 'none';
+}
+
+function validateStats() {
+  var tier = parseInt(document.getElementById('tier-select').value);
+  var atk = parseInt(document.getElementById('attack-input').value) || 0;
+  var def = parseInt(document.getElementById('defense-input').value) || 0;
+  var sum = atk + def;
+  var warning = document.getElementById('stat-warning');
+  if (sum !== tier) {
+    warning.textContent = '現在の合計: ' + sum + ' / ' + tier + '族にしてください';
+    warning.classList.add('warning-active');
+  } else {
+    warning.textContent = '✓ ' + tier + '族と一致しています';
+    warning.classList.remove('warning-active');
+    warning.classList.add('warning-ok');
+  }
+}
+</script>
