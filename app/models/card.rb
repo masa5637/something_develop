@@ -1,6 +1,7 @@
 class Card < ApplicationRecord
   belongs_to :user
   has_one_attached :image
+  has_many :deck_cards, dependent: :destroy
 
   TIERS = [300, 200, 150, 100].freeze
 

@@ -25,4 +25,11 @@ Rails.application.routes.draw do
   resources :lobby, only: [:index]
 
   resources :cards
+
+  resources :decks do
+    member do
+      post "add_card/:card_id", action: :add_card, as: :add_card
+      delete "remove_card/:card_id", action: :remove_card, as: :remove_card
+    end
+  end
 end

@@ -1,0 +1,91 @@
+<div class="pg">
+  <div class="topbar">
+    <a href="/" class="topbar-logo">ARCANA</a>
+    <%= link_to "← デッキ一覧", decks_path, class: "btn-home" %>
+  </div>
+
+  <div class="deck-name-bar">
+    <%= form_with model: @deck, local: true do |f| %>
+      <%= f.text_field :name, placeholder: "デッキ名を入力", onchange: "this.form.requestSubmit()" %>
+    <% end %>
+  </div>
+
+  <div class="deck-status">
+    <div class="deck-status-item">合計: <%= @deck.total_count %> / 20</div>
+    <div class="deck-status-item <%= @deck.monster_count >= 5 ? 'ok' : 'warn' %>">モンスター: <%= @deck.monster_count %> / 5以上</div>
+    <div class="deck-status-item <%= @deck.spell_count >= 5 ? 'ok' : 'warn' %>">魔法: <%= @deck.spell_count %> / 5以上</div>
+    <div class="deck-status-item <%= @deck.tier_300_count > 2 ? 'over' : '' %>">300族: <%= @deck.tier_300_count %> / 2まで</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">採用中のカード</div>
+    <div class="deck-list">
+      <% if @deck.cards.empty? %>
+        <div class="empty-deck-msg">まだカードがありません</div>
+      <% end %>
+      <% @deck.cards.each do |card| %>
+        <div class="deck-mini-card mini-card" style="position:relative;">
+          <div class="mini-card-img">
+            <% if card.image.attached? %>
+              <%= image_tag card.image, class: "card-img-tag" %>
+            <% else %>
+              <span class="mini-card-rune">⬡</span>
+            <% end %>
+          </div>
+          <div class="mini-card-footer">
+            <div class="mini-card-name"><%= card.name %></div>
+          </div>
+          <%= button_to "×", remove_card_deck_path(@deck, card_id: card.id), method: :delete, class: "remove-x", form: { style: "display:inline;" } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="section">
+  <div class="section-title">手持ちカード（タップで追加）</div>
+  <div class="cards-grid">
+    <% @my_cards.each do |card| %>
+      <% in_deck = @deck_card_ids.include?(card.id) %>
+
+      <% if in_deck %>
+        <div class="mini-card in-deck">
+          <div class="mini-card-img">
+            <% if card.image.attached? %>
+              <%= image_tag card.image, class: "card-img-tag" %>
+            <% else %>
+              <span class="mini-card-rune">⬡</span>
+            <% end %>
+          </div>
+          <div class="mini-card-footer">
+            <div class="mini-card-name"><%= card.name %></div>
+            <% if card.monster? %>
+              <span class="mini-card-sub"><%= card.tier %>族 A<%= card.attack %>/D<%= card.defense %></span>
+            <% else %>
+              <span class="mini-card-sub sp">魔法</span>
+            <% end %>
+          </div>
+          <div class="in-deck-badge">採用中</div>
+        </div>
+      <% else %>
+        <%= button_to add_card_deck_path(@deck, card_id: card.id), method: :post, class: "mini-card mini-card-button" do %>
+          <div class="mini-card-img">
+            <% if card.image.attached? %>
+              <%= image_tag card.image, class: "card-img-tag" %>
+            <% else %>
+              <span class="mini-card-rune">⬡</span>
+            <% end %>
+          </div>
+          <div class="mini-card-footer">
+            <div class="mini-card-name"><%= card.name %></div>
+            <% if card.monster? %>
+              <span class="mini-card-sub"><%= card.tier %>族 A<%= card.attack %>/D<%= card.defense %></span>
+            <% else %>
+              <span class="mini-card-sub sp">魔法</span>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+
+    <% end %>
+  </div>
+</div>

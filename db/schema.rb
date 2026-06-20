@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_06_19_120729) do
+ActiveRecord::Schema[7.1].define(version: 2026_06_20_190241) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,23 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_19_120729) do
     t.index ["user_id"], name: "index_cards_on_user_id"
   end
 
+  create_table "deck_cards", force: :cascade do |t|
+    t.bigint "deck_id", null: false
+    t.bigint "card_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["card_id"], name: "index_deck_cards_on_card_id"
+    t.index ["deck_id"], name: "index_deck_cards_on_deck_id"
+  end
+
+  create_table "decks", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "name"
+    t.index ["user_id"], name: "index_decks_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -73,4 +90,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_06_19_120729) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "cards", "users"
+  add_foreign_key "deck_cards", "cards"
+  add_foreign_key "deck_cards", "decks"
+  add_foreign_key "decks", "users"
 end

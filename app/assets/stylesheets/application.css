@@ -1557,3 +1557,381 @@ a {
 .form-area { padding: 32px 24px; max-width: 400px; margin: 0 auto; }
 .card-form { background: #17152a; border: 1px solid #2a2540; border-radius: 8px; padding: 24px; margin-top: 16px; }
 .current-image-preview { width: 100%; max-height: 150px; object-fit: cover; border-radius: 4px; margin-top: 4px; }
+.card-spell-desc { font-size: 10px; color: #9a70e0; line-height: 1.4; }
+
+
+
+
+/* ===========================================
+   ARCANA Card Battle — 追加CSSまとめ
+   （カード一覧・フォーム・エラー表示など）
+   =========================================== */
+
+/* ---- リンクの下線を消す（全体） ---- */
+a {
+  text-decoration: none;
+}
+
+/* ---- カード画像（一覧・対戦共通） ---- */
+.card-img-tag {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---- カード一覧：編集・削除ボタン ---- */
+.card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.card-edit-link,
+.card-delete-btn {
+  flex: 1;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 6px;
+  text-align: center;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid #2a2540;
+  background: transparent;
+  color: #6b6080;
+}
+
+.card-edit-link:hover {
+  color: #c9b87a;
+  border-color: rgba(201, 184, 122, 0.27);
+}
+
+.card-delete-btn:hover {
+  color: #d4736a;
+  border-color: rgba(212, 115, 106, 0.27);
+}
+
+/* ---- 魔法カードの効果説明文 ---- */
+.card-spell-desc {
+  font-size: 10px;
+  color: #9a70e0;
+  line-height: 1.4;
+}
+
+/* ---- カード作成・編集フォーム ---- */
+.form-area {
+  padding: 32px 24px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.card-form {
+  background: #17152a;
+  border: 1px solid #2a2540;
+  border-radius: 8px;
+  padding: 24px;
+  margin-top: 16px;
+}
+
+.current-image-preview {
+  width: 100%;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+/* ---- カードタイプ切り替えタブ（モンスター／魔法） ---- */
+.type-tabs {
+  display: flex;
+  gap: 10px;
+}
+
+.type-tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #6b6080;
+}
+
+/* ---- ステータス合計の警告表示（族と一致しているか） ---- */
+.stat-warning {
+  font-size: 11px;
+  margin-top: 6px;
+  color: #d4736a;
+}
+
+.stat-warning.warning-ok {
+  color: #5cb56e;
+}
+
+/* ---- フォームのバリデーションエラー表示 ---- */
+.error-messages {
+  color: #d4736a;
+  margin-bottom: 12px;
+  font-size: 12px;
+  background: #1a0f0f;
+  border: 1px solid #3a2020;
+  border-radius: 4px;
+  padding: 12px 16px;
+}
+
+.error-messages ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.error-messages li {
+  margin-bottom: 4px;
+}
+
+.error-messages li:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- ロビー：下部ボタン（カード編集／ホームに戻る） ---- */
+.bottom-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.btn-deck {
+  width: 100%;
+  padding: 13px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  background: transparent;
+  color: #c9b87a;
+  border: 1px solid #3a3060;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.btn-deck:hover {
+  border-color: #c9b87a;
+}
+
+.btn-home {
+  width: 100%;
+  padding: 13px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  background: transparent;
+  color: #6b6080;
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.btn-home:hover {
+  color: #e8e0d0;
+  border-color: #3a3060;
+}
+
+.deck-status { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.deck-status-item { flex: 1; min-width: 100px; background: #17152a; border: 1px solid #2a2540; border-radius: 4px; padding: 8px; text-align: center; font-size: 11px; color: #6b6080; }
+.deck-status-item.ok { color: #5cb56e; border-color: #3a8a4a44; }
+.deck-status-item.warn { color: #d4736a; }
+.deck-status-item.over { color: #d4736a; border-color: #8a3a3a44; }
+
+.deck-card { background: #17152a; border: 1px solid #2a2540; border-radius: 6px; padding: 16px; width: 100%; }
+.deck-card-name { font-family: 'Cinzel', serif; font-size: 13px; color: #c9b87a; margin-bottom: 6px; }
+.deck-card-count { font-size: 11px; color: #6b6080; margin-bottom: 10px; }
+
+/* ===========================================
+   ARCANA — デッキ編集画面
+   =========================================== */
+
+.deck-name-bar {
+  padding: 14px 20px;
+  border-bottom: 1px solid #1a1830;
+}
+
+.deck-name-bar input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  color: #c9b87a;
+  letter-spacing: 0.1em;
+  outline: none;
+}
+
+.deck-status {
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+}
+
+.deck-status-item {
+  flex: 1;
+  min-width: 90px;
+  background: #17152a;
+  border: 1px solid #2a2540;
+  border-radius: 4px;
+  padding: 8px;
+  text-align: center;
+  font-size: 10px;
+  color: #6b6080;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.05em;
+}
+
+.deck-status-item.ok   { color: #5cb56e; border-color: rgba(58, 138, 74, 0.27); }
+.deck-status-item.warn { color: #d4736a; }
+.deck-status-item.over { color: #d4736a; border-color: rgba(138, 58, 58, 0.27); }
+
+.section {
+  padding: 8px 20px 20px;
+}
+
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: #3a3060;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* ---- カードグリッド ---- */
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+  gap: 10px;
+}
+
+.mini-card {
+  background: #17152a;
+  border: 1px solid #2a2540;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s, opacity 0.15s;
+  position: relative;
+}
+
+.mini-card:hover     { border-color: rgba(201, 184, 122, 0.27); }
+.mini-card.in-deck   { opacity: 0.35; cursor: default; }
+
+.mini-card-img {
+  width: 100%;
+  height: 56px;
+  background: linear-gradient(160deg, #1e1a3a, #2a2350);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mini-card-rune {
+  font-family: 'Cinzel', serif;
+  font-size: 20px;
+  color: #3a3060;
+}
+
+.mini-card-footer {
+  padding: 4px 5px;
+  background: #13112a;
+}
+
+.mini-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 7px;
+  color: #c9b87a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.mini-card-sub    { font-size: 7px; color: #6b6080; }
+.mini-card-sub.sp { color: #9a70e0; }
+
+.in-deck-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(15, 14, 21, 0.8);
+  color: #c9b87a;
+  font-size: 8px;
+  font-family: 'Cinzel', serif;
+  padding: 2px 4px;
+  border-radius: 2px;
+  border: 1px solid rgba(201, 184, 122, 0.27);
+}
+
+/* ---- 採用中デッキリスト ---- */
+
+.deck-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.deck-mini-card { flex-shrink: 0; width: 60px; }
+.deck-mini-card .mini-card-img { height: 44px; }
+
+.remove-x {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  background: #8a3a3a;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  line-height: 1;
+}
+
+.empty-deck-msg {
+  font-size: 11px;
+  color: #3a3060;
+  text-align: center;
+  padding: 20px;
+}
+
+/* ---- デッキ一覧画面 ---- */
+
+.deck-card {
+  background: #17152a;
+  border: 1px solid #2a2540;
+  border-radius: 6px;
+  padding: 16px;
+  width: 100%;
+}
+
+.deck-card-name {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  color: #c9b87a;
+  margin-bottom: 6px;
+}
+
+.deck-card-count {
+  font-size: 11px;
+  color: #6b6080;
+  margin-bottom: 10px;
+}

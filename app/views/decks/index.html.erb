@@ -1,0 +1,29 @@
+<div class="pg">
+  <div class="topbar">
+    <a href="/" class="topbar-logo">ARCANA</a>
+    <%= link_to "← ホームに戻る", root_path, class: "btn-home" %>
+  </div>
+
+  <div class="section">
+    <div class="section-title">マイデッキ</div>
+    <div class="cards-row">
+
+      <% @decks.each do |deck| %>
+        <div class="deck-card">
+          <div class="deck-card-name"><%= deck.name.presence || "名称未設定デッキ" %></div>
+          <div class="deck-card-count"><%= deck.total_count %>枚</div>
+          <div class="card-actions">
+            <%= link_to "編集", edit_deck_path(deck), class: "card-edit-link" %>
+            <%= button_to "削除", deck, method: :delete, class: "card-delete-btn", form: { data: { turbo_confirm: "本当に削除しますか？" } } %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= link_to new_deck_path, class: "new-card-btn" do %>
+        <div class="plus-icon">+</div>
+        デッキを作成
+      <% end %>
+
+    </div>
+  </div>
+</div>
