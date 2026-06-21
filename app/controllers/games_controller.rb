@@ -27,6 +27,21 @@ class GamesController < ApplicationController
     redirect_to game_path(@game)
   end
 
+  def select_spell
+    @game.select_spell(params[:card_id].to_i)
+    redirect_to game_path(@game)
+  end
+
+  def confirm_spell_target
+    @game.confirm_spell_target(params[:target_index].to_i)
+    redirect_to game_path(@game)
+  end
+
+  def cancel_spell
+    @game.cancel_spell
+    redirect_to game_path(@game)
+  end
+
   private
 
   def set_game

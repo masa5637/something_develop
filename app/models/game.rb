@@ -1,9 +1,10 @@
 class Game < ApplicationRecord
   belongs_to :user
 
-  PLAYER_START_HP = 100
-  CPU_START_HP = 100
+  PLAYER_START_HP = 2000
+  CPU_START_HP = 2000
   HAND_SIZE = 5
+  SINGLE_TARGET_EFFECTS = %w[enemy_monster self_monster].freeze
 
   # ---- 対戦開始 ----
 
@@ -23,6 +24,7 @@ class Game < ApplicationRecord
       difficulty: difficulty,
       status: "in_progress",
       state: {
+        "turn_count" => 1,
         "player_hp" => PLAYER_START_HP,
         "cpu_hp" => CPU_START_HP,
         "player_deck" => player_deck_card_ids,
@@ -31,6 +33,7 @@ class Game < ApplicationRecord
         "cpu_hand" => cpu_hand_ids,
         "player_field" => [],
         "cpu_field" => [],
+        "pending_spell_id" => nil,
         "turn" => first_turn,
         "log" => [first_turn == "player" ? "あなたが先攻です！" : "相手が先攻です！"]
       }
@@ -93,24 +96,23 @@ class Game < ApplicationRecord
     if card.monster?
       state["player_field"] << { "card_id" => card.id, "current_hp" => card.tier, "attacked" => false }
       add_log("#{card.name}を召喚した！")
+      state["player_hand"].delete(card_id)
+      save!
     else
-      apply_spell(card, attacker: "player")
-      add_log("#{card.name}を発動した！")
+      # 魔法は select_spell 経由で発動するのでここでは何もしない
+      select_spell(card_id)
     end
-
-    state["player_hand"].delete(card_id)
-    save!
   end
 
   def attack(attacker_index, target_index = nil)
     return unless turn == "player"
+    return if state["turn_count"] == 1
     attacker = state["player_field"][attacker_index]
     return if attacker.nil? || attacker["attacked"]
 
     attacker_card = Card.find(attacker["card_id"])
 
     if state["cpu_field"].empty?
-      # 直接攻撃
       state["cpu_hp"] -= attacker_card.attack
       add_log("#{attacker_card.name}が直接攻撃！ #{attacker_card.attack}ダメージ！")
     else
@@ -136,15 +138,62 @@ class Game < ApplicationRecord
   def end_turn
     return unless turn == "player"
     state["turn"] = "cpu"
+    state["turn_count"] += 1
     save!
+    draw_card("cpu")
     cpu_take_turn
+  end
+
+  # ---- 魔法カードの対象選択 ----
+
+  def select_spell(card_id)
+    return unless turn == "player"
+    card = Card.find(card_id)
+    return unless card.spell?
+    return unless state["player_hand"].include?(card_id)
+
+    if SINGLE_TARGET_EFFECTS.include?(card.effect_target)
+      state["pending_spell_id"] = card_id
+      save!
+    else
+      apply_spell(card, attacker: "player")
+      add_log("#{card.name}を発動した！")
+      state["player_hand"].delete(card_id)
+      save!
+      check_finish!
+    end
+  end
+
+  def pending_spell
+    return nil unless state["pending_spell_id"]
+    Card.find(state["pending_spell_id"])
+  end
+
+  def confirm_spell_target(target_index)
+    return unless state["pending_spell_id"]
+    card_id = state["pending_spell_id"]
+    card = Card.find(card_id)
+
+    apply_spell(card, attacker: "player", target_index: target_index)
+    add_log("#{card.name}を発動した！")
+
+    state["player_hand"].delete(card_id)
+    state["pending_spell_id"] = nil
+    save!
+    check_finish!
+  end
+
+  def cancel_spell
+    state["pending_spell_id"] = nil
+    save!
   end
 
   # ---- CPUの行動（簡易AI） ----
   # start_for から呼べるように public のままにしておく
 
   def cpu_take_turn
-    # 手札にモンスターがあれば1体出す
+    draw_card("cpu") unless state["turn_count"] == 1
+
     monster_id = state["cpu_hand"].find { |id| Card.find(id).monster? }
     if monster_id
       card = Card.find(monster_id)
@@ -153,7 +202,6 @@ class Game < ApplicationRecord
       add_log("相手が#{card.name}を召喚した！")
     end
 
-    # フィールドのモンスターで攻撃
     state["cpu_field"].each do |attacker|
       next if attacker["attacked"]
       attacker_card = Card.find(attacker["card_id"])
@@ -175,35 +223,57 @@ class Game < ApplicationRecord
       attacker["attacked"] = true
     end
 
-    # ターンエンド：攻撃済みフラグをリセットしてプレイヤーへ
     state["player_field"].each { |f| f["attacked"] = false }
     state["cpu_field"].each { |f| f["attacked"] = false }
+    state["turn_count"] += 1
     state["turn"] = "player"
+    draw_card("player")
     save!
     check_finish!
   end
 
   private
 
-  def apply_spell(card, attacker:)
-    target_field = attacker == "player" ? "cpu_field" : "player_field"
-
-    case card.effect_action
-    when "destroy"
-      target = state[target_field].first
+  def apply_spell(card, attacker:, target_index: nil)
+    case card.effect_target
+    when "enemy_monster"
+      field = attacker == "player" ? "cpu_field" : "player_field"
+      target = state[field][target_index]
       if target
         target_card = Card.find(target["card_id"])
-        add_log("#{target_card.name}は破壊された！")
-        state[target_field].shift
+        if card.effect_action == "destroy"
+          add_log("#{target_card.name}は破壊された！")
+          state[field].delete_at(target_index)
+        elsif card.effect_action == "damage"
+          target["current_hp"] -= card.effect_value
+          if target["current_hp"] <= 0
+            add_log("#{target_card.name}は破壊された！")
+            state[field].delete_at(target_index)
+          end
+        end
       end
-    when "damage"
+    when "self_monster"
+      field = attacker == "player" ? "player_field" : "cpu_field"
+      target = state[field][target_index]
+      if target
+        target_card = Card.find(target["card_id"])
+        case card.effect_action
+        when "heal"
+          target["current_hp"] += card.effect_value
+        when "atk_up", "atk_down"
+          # 簡易実装：永続強化は今後拡張
+        end
+      end
+    when "enemy_all_monster"
+      field = attacker == "player" ? "cpu_field" : "player_field"
+      state[field].each { |t| t["current_hp"] -= card.effect_value.to_i }
+      state[field].reject! { |t| t["current_hp"] <= 0 }
+    when "enemy_player"
       hp_key = attacker == "player" ? "cpu_hp" : "player_hp"
       state[hp_key] -= card.effect_value
-    when "heal"
+    when "self_player"
       hp_key = attacker == "player" ? "player_hp" : "cpu_hp"
       state[hp_key] += card.effect_value
-    when "atk_up"
-      # 簡易実装（拡張予定）
     end
   end
 
@@ -217,5 +287,16 @@ class Game < ApplicationRecord
       add_log("敗北…")
       save!
     end
+  end
+
+  def draw_card(side)
+    deck_key = "#{side}_deck"
+    hand_key = "#{side}_hand"
+    return if state[deck_key].empty?
+
+    drawn_id = state[deck_key].shift
+    state[hand_key] << drawn_id
+    card = Card.find(drawn_id)
+    add_log("#{side == 'player' ? 'あなた' : '相手'}は#{card.name}をドローした")
   end
 end

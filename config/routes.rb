@@ -38,6 +38,9 @@ Rails.application.routes.draw do
       post :play_card
       post :attack
       post :end_turn
+      post :select_spell
+      post :confirm_spell_target
+      post :cancel_spell
     end
   end
 end

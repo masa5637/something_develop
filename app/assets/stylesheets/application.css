@@ -1986,3 +1986,391 @@ a {
   padding: 12px 32px;
   width: auto;
 }
+
+/* ===========================================
+   ARCANA — 対戦画面（拡大版）
+   既存の battle 用 CSS をこの内容で丸ごと置き換え
+   =========================================== */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 22px;
+  border-bottom: 1px solid #1a1830;
+}
+
+.topbar-logo {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  letter-spacing: 0.2em;
+  color: #c9b87a;
+  text-decoration: none;
+}
+
+.turn-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: #6b6080;
+  padding: 6px 16px;
+  border: 1px solid #2a2540;
+  border-radius: 2px;
+}
+
+.turn-badge.my-turn {
+  color: #c9b87a;
+  border-color: rgba(201, 184, 122, 0.3);
+}
+
+.end-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  padding: 7px 18px;
+  background: transparent;
+  color: #6b6080;
+  border: 1px solid #2a2540;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.end-btn:hover { color: #c9b87a; border-color: rgba(201, 184, 122, 0.3); }
+.end-btn:disabled { cursor: not-allowed; opacity: 0.4; }
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 18px;
+  gap: 7px;
+}
+
+.player-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #251f45;
+  border: 1px solid #2a2540;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: #c9b87a;
+  flex-shrink: 0;
+}
+
+.player-meta { flex: 1; min-width: 0; }
+
+.pname {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: #e8e0d0;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.hp-row { display: flex; align-items: center; gap: 10px; }
+
+.hp-bar-bg {
+  flex: 1;
+  height: 6px;
+  background: #1a1830;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.hp-bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s; }
+.hp-bar-fill.high { background: #3a8a4a; }
+.hp-bar-fill.mid  { background: #a08030; }
+.hp-bar-fill.low  { background: #8a3a3a; }
+
+.hp-num {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: #6b6080;
+  white-space: nowrap;
+}
+
+/* ---- ゾーン共通 ---- */
+
+.zone-block { border-radius: 6px; padding: 7px 10px 9px; }
+
+.zone-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin-bottom: 7px;
+  text-align: center;
+}
+
+.zone-cards { display: flex; gap: 8px; justify-content: center; }
+
+.field-col { display: flex; flex-direction: column; gap: 6px; }
+
+.monster-block { background: #17152a; border: 1px solid #2a2540; }
+.monster-block .zone-label { color: #3a3060; }
+
+.spell-block { background: #12102a; border: 1px solid #2a2540; }
+.spell-block .zone-label { color: #4a3080; }
+
+.enemy-col { transform: rotate(180deg); }
+.enemy-col .zone-label { transform: rotate(180deg); display: block; }
+
+/* ---- モンスターカード（フィールド） ---- */
+
+.fcard {
+  flex-shrink: 0;
+  width: 86px;
+  height: 122px;
+  background: linear-gradient(160deg, #1e1a3a, #251f45);
+  border: 1px solid #2a2540;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.12s, border-color 0.12s;
+}
+
+.fcard:hover { transform: translateY(-3px); border-color: rgba(201, 184, 122, 0.35); }
+.fcard.attacked { opacity: 0.4; }
+
+.fcard-img {
+  width: 100%;
+  height: 78px;
+  background: linear-gradient(160deg, #1e1a3a, #2a2350);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fcard-img img,
+.card-img-tag { width: 100%; height: 100%; object-fit: cover; }
+
+.fcard-rune { font-family: 'Cinzel', serif; font-size: 28px; color: #3a3060; }
+
+.fcard-footer { padding: 5px 6px; background: #13112a; }
+
+.fcard-name {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  color: #c9b87a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+
+.fcard-stats { display: flex; gap: 5px; }
+.fstat { font-size: 9px; font-family: 'Cinzel', serif; }
+.fstat.a { color: #d4736a; }
+.fstat.d { color: #6a9fd4; }
+
+/* ---- 魔法スロット ---- */
+
+.scard {
+  flex-shrink: 0;
+  width: 86px;
+  height: 76px;
+  border: 1px dashed #2a2540;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.scard:hover { border-color: rgba(122, 80, 192, 0.3); background: #1a1535; }
+
+.scard.filled {
+  border-style: solid;
+  border-color: #3a2a60;
+  background: linear-gradient(160deg, #1a1535, #221845);
+}
+
+.scard-icon { font-size: 22px; color: #2a2050; }
+.scard.filled .scard-icon { color: #7a50c0; }
+
+.scard-label {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  color: #3a2a60;
+  text-align: center;
+  padding: 0 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 78px;
+}
+
+.scard.filled .scard-label { color: #9a70e0; }
+.scard-plus { font-family: 'Cinzel', serif; font-size: 20px; color: #2a2050; }
+
+/* ---- 空モンスタースロット ---- */
+
+.empty-slot {
+  flex-shrink: 0;
+  width: 86px;
+  height: 122px;
+  border: 1px dashed #2a2540;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #2a2540;
+}
+
+/* ---- VS ---- */
+
+.vs-bar { display: flex; align-items: center; gap: 10px; }
+.vs-line { flex: 1; height: 1px; background: #2a2540; }
+.vs-txt {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: #2a2540;
+  letter-spacing: 0.4em;
+}
+
+/* ---- ログ ---- */
+
+.log-strip {
+  background: #17152a;
+  border: 1px solid #2a2540;
+  border-radius: 5px;
+  padding: 7px 14px;
+  font-size: 13px;
+  color: #6b6080;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.log-strip span    { color: #c9b87a; }
+.log-strip span.sp { color: #9a70e0; }
+
+/* ---- 手札エリア ---- */
+
+.hand-area { border-top: 1px solid #1a1830; padding: 10px 18px 16px; }
+
+.hand-label {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.35em;
+  color: #3a3060;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.hand-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; }
+
+/* ---- 手札カード ---- */
+
+.hcard {
+  flex-shrink: 0;
+  width: 98px;
+  height: 138px;
+  background: linear-gradient(160deg, #1e1a3a, #251f45);
+  border: 1px solid #2a2540;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.hcard:hover { transform: translateY(-7px); border-color: rgba(201, 184, 122, 0.35); }
+.hcard.spell-card { border-color: #2a2050; }
+.hcard.spell-card:hover { border-color: rgba(122, 80, 192, 0.35); }
+
+.hcard-img {
+  width: 100%;
+  height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hcard-img.monster { background: linear-gradient(160deg, #1e1a3a, #2a2350); }
+.hcard-img.spell   { background: linear-gradient(160deg, #12102a, #1a1535); }
+
+.hcard-rune { font-family: 'Cinzel', serif; font-size: 32px; color: #3a3060; }
+.hcard-rune.sp { color: #3a2a60; }
+
+.hcard-footer { padding: 5px 6px; flex: 1; }
+.hcard-footer.monster { background: #13112a; }
+.hcard-footer.spell   { background: #110f25; }
+
+.hcard-name {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+
+.hcard-name.m { color: #c9b87a; }
+.hcard-name.s { color: #9a70e0; }
+
+.hcard-type { font-size: 8px; color: #5a4090; font-family: 'Cinzel', serif; line-height: 1.3; }
+
+.hcard-stats { display: flex; gap: 5px; }
+.hstat { font-size: 9px; font-family: 'Cinzel', serif; }
+.hstat.a { color: #d4736a; }
+.hstat.d { color: #6a9fd4; }
+
+/* ---- ボタン化したカード ---- */
+
+.fcard-button, .hcard-button {
+  all: unset;
+  display: block;
+  cursor: pointer;
+}
+
+.fcard-button:disabled, .hcard-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* ---- 勝敗バナー ---- */
+
+.game-over-banner {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 14, 21, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  z-index: 100;
+}
+
+.game-over-title {
+  font-family: 'Cinzel', serif;
+  font-size: 30px;
+  letter-spacing: 0.15em;
+  color: #c9b87a;
+}
+
+.game-over-btn { display: inline-block; padding: 14px 36px; width: auto; }
+
+.fcard.targetable {
+  border-color: #9a70e0;
+  box-shadow: 0 0 8px rgba(154, 112, 224, 0.4);
+}
