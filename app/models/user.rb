@@ -5,4 +5,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   has_many :cards, dependent: :destroy
   has_many :decks, dependent: :destroy
+  has_many :games, dependent: :destroy
 end

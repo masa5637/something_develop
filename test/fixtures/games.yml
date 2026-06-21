@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  difficulty: MyString
+  status: MyString
+  state: 
+
+two:
+  user: two
+  difficulty: MyString
+  status: MyString
+  state: 

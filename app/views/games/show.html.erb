@@ -1,0 +1,168 @@
+<div class="pg">
+  <div class="topbar">
+    <a href="/" class="topbar-logo">ARCANA</a>
+    <div class="turn-badge <%= @game.turn == 'player' ? 'my-turn' : '' %>">
+      <%= @game.turn == 'player' ? 'あなたのターン' : '相手のターン' %>
+    </div>
+    <%= button_to "ターン終了", end_turn_game_path(@game),
+          method: :post,
+          disabled: @game.turn != "player" || @game.finished?,
+          class: "end-btn",
+          form: { style: "display:inline;" } %>
+  </div>
+
+  <div class="field">
+
+    <div class="player-strip">
+      <div class="avatar">CPU</div>
+      <div class="player-meta">
+        <div class="pname">相手プレイヤー</div>
+        <div class="hp-row">
+          <div class="hp-bar-bg">
+            <div class="hp-bar-fill <%= @game.cpu_hp <= 30 ? 'low' : @game.cpu_hp <= 60 ? 'mid' : 'high' %>"
+                 style="width: <%= [[@game.cpu_hp, 0].max, 100].min %>%"></div>
+          </div>
+          <div class="hp-num"><%= [@game.cpu_hp, 0].max %> / 100</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-col enemy-col">
+      <div class="zone-block monster-block">
+        <div class="zone-label">相手 モンスターゾーン</div>
+        <div class="zone-cards">
+          <% @game.cpu_field_monsters.each do |m| %>
+            <div class="fcard">
+              <div class="fcard-img">
+                <% if m[:card].image.attached? %>
+                  <%= image_tag m[:card].image, class: "card-img-tag" %>
+                <% else %>
+                  <span class="fcard-rune">⬡</span>
+                <% end %>
+              </div>
+              <div class="fcard-footer">
+                <div class="fcard-name"><%= m[:card].name %></div>
+                <div class="fcard-stats">
+                  <span class="fstat a">A:<%= m[:card].attack %></span>
+                  <span class="fstat d">HP:<%= m[:current_hp] %></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+          <% (5 - @game.cpu_field_monsters.size).times do %>
+            <div class="empty-slot">+</div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="vs-bar">
+      <div class="vs-line"></div>
+      <div class="vs-txt">VS</div>
+      <div class="vs-line"></div>
+    </div>
+
+    <div class="log-strip"><%= @game.log.last %></div>
+
+    <div class="field-col">
+      <div class="zone-block monster-block">
+        <div class="zone-label">モンスターゾーン</div>
+        <div class="zone-cards">
+          <% @game.player_field_monsters.each do |m| %>
+            <% first_cpu_target = @game.cpu_field_monsters.first %>
+            <%= button_to attack_game_path(
+                  @game,
+                  attacker_index: m[:index],
+                  target_index: first_cpu_target ? first_cpu_target[:index] : nil
+                ),
+                method: :post,
+                disabled: m[:attacked] || @game.turn != "player" || @game.finished?,
+                class: "fcard-button" do %>
+              <div class="fcard <%= 'attacked' if m[:attacked] %>">
+                <div class="fcard-img">
+                  <% if m[:card].image.attached? %>
+                    <%= image_tag m[:card].image, class: "card-img-tag" %>
+                  <% else %>
+                    <span class="fcard-rune">⬡</span>
+                  <% end %>
+                </div>
+                <div class="fcard-footer">
+                  <div class="fcard-name"><%= m[:card].name %></div>
+                  <div class="fcard-stats">
+                    <span class="fstat a">A:<%= m[:card].attack %></span>
+                    <span class="fstat d">HP:<%= m[:current_hp] %></span>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
+          <% (5 - @game.player_field_monsters.size).times do %>
+            <div class="empty-slot">+</div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="player-strip">
+      <div class="avatar">P1</div>
+      <div class="player-meta">
+        <div class="pname">あなた</div>
+        <div class="hp-row">
+          <div class="hp-bar-bg">
+            <div class="hp-bar-fill <%= @game.player_hp <= 30 ? 'low' : @game.player_hp <= 60 ? 'mid' : 'high' %>"
+                 style="width: <%= [[@game.player_hp, 0].max, 100].min %>%"></div>
+          </div>
+          <div class="hp-num"><%= [@game.player_hp, 0].max %> / 100</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hand-area">
+    <div class="hand-label">手札</div>
+    <div class="hand-row">
+      <% @game.player_hand_cards.each do |card| %>
+        <%= button_to play_card_game_path(@game, card_id: card.id),
+              method: :post,
+              disabled: @game.turn != "player" || @game.finished?,
+              class: "hcard-button" do %>
+          <div class="hcard <%= 'spell-card' if card.spell? %>">
+            <div class="hcard-img <%= card.monster? ? 'monster' : 'spell' %>">
+              <% if card.image.attached? %>
+                <%= image_tag card.image, class: "card-img-tag" %>
+              <% else %>
+                <span class="hcard-rune <%= 'sp' if card.spell? %>">⬡</span>
+              <% end %>
+            </div>
+            <div class="hcard-footer <%= card.monster? ? 'monster' : 'spell' %>">
+              <div class="hcard-name <%= card.monster? ? 'm' : 's' %>"><%= card.name %></div>
+              <% if card.monster? %>
+                <div class="hcard-stats">
+                  <span class="hstat a">A:<%= card.attack %></span>
+                  <span class="hstat d">D:<%= card.defense %></span>
+                </div>
+              <% else %>
+                <div class="hcard-type"><%= card.effect_description %></div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
+      <% if @game.player_hand_cards.empty? %>
+        <div class="empty-deck-msg">手札がありません</div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @game.finished? %>
+    <div class="game-over-banner">
+      <div class="game-over-title">
+        <%= @game.cpu_hp <= 0 ? "🎉 勝利！" : "敗北…" %>
+      </div>
+      <%= link_to "ロビーに戻る", lobby_index_path, class: "btn-main game-over-btn" %>
+    </div>
+  <% end %>
+
+</div>

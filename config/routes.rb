@@ -32,4 +32,12 @@ Rails.application.routes.draw do
       delete "remove_card/:card_id", action: :remove_card, as: :remove_card
     end
   end
+
+  resources :games, only: [:show, :create] do
+    member do
+      post :play_card
+      post :attack
+      post :end_turn
+    end
+  end
 end

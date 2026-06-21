@@ -1,7 +1,5 @@
 // ARCANA Card Battle — Lobby
 
-// ---- Panel 表示切り替え ----
-
 function showPanel(type) {
   document.getElementById('mode-cards').style.display = 'none';
   document.getElementById('cpu-panel').classList.remove('visible');
@@ -15,17 +13,14 @@ function hidePanel(type) {
   document.getElementById(type + '-panel').classList.remove('visible');
 }
 
-// ---- CPU難易度選択 ----
-
-function selectDiff(el) {
+function selectDiff(el, level) {
   document.querySelectorAll('.diff-btn').forEach(function (b) {
     b.classList.remove('active');
   });
   el.classList.add('active');
+  document.getElementById('difficulty-input').value = level;
   document.getElementById('start-cpu-btn').classList.add('visible');
 }
-
-// ---- オンライン部屋タブ ----
 
 function switchRoomTab(tab) {
   document.getElementById('tab-create').classList.toggle('active', tab === 'create');
@@ -33,8 +28,6 @@ function switchRoomTab(tab) {
   document.getElementById('room-create').classList.toggle('visible', tab === 'create');
   document.getElementById('room-join').classList.toggle('visible', tab === 'join');
 }
-
-// ---- ルームコード生成 ----
 
 function generateCode() {
   var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -44,8 +37,6 @@ function generateCode() {
   }
   document.getElementById('room-code').textContent = code;
 }
-
-// ---- コードコピー ----
 
 function copyCode() {
   var code = document.getElementById('room-code').textContent;
@@ -57,3 +48,11 @@ function copyCode() {
     }, 2000);
   });
 }
+
+// ---- グローバルに公開（onclick属性から呼べるようにする） ----
+window.showPanel = showPanel;
+window.hidePanel = hidePanel;
+window.selectDiff = selectDiff;
+window.switchRoomTab = switchRoomTab;
+window.generateCode = generateCode;
+window.copyCode = copyCode;

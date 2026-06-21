@@ -1935,3 +1935,54 @@ a {
   color: #6b6080;
   margin-bottom: 10px;
 }
+
+/* ===========================================
+   ARCANA — 対戦画面（実データ接続分）
+   =========================================== */
+
+.fcard-button,
+.hcard-button {
+  all: unset;
+  display: block;
+  cursor: pointer;
+}
+
+.fcard-button:disabled,
+.hcard-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.fcard.attacked {
+  opacity: 0.4;
+}
+
+.end-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.game-over-banner {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 14, 21, 0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  z-index: 100;
+}
+
+.game-over-title {
+  font-family: 'Cinzel', serif;
+  font-size: 26px;
+  letter-spacing: 0.15em;
+  color: #c9b87a;
+}
+
+.game-over-btn {
+  display: inline-block;
+  padding: 12px 32px;
+  width: auto;
+}
