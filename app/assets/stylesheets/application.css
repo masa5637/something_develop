@@ -2374,3 +2374,10 @@ a {
   border-color: #9a70e0;
   box-shadow: 0 0 8px rgba(154, 112, 224, 0.4);
 }
+
+.fstat.de { color: #6a9fd4; }
+.fstat.hp { color: #c9b87a; }
+.fcard.selected-attacker {
+  border-color: #d4736a;
+  box-shadow: 0 0 8px rgba(212, 115, 106, 0.4);
+}

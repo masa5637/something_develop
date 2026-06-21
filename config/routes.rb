@@ -41,6 +41,9 @@ Rails.application.routes.draw do
       post :select_spell
       post :confirm_spell_target
       post :cancel_spell
+      post :select_attacker
+      post :confirm_attack_target
+      post :cancel_attack
     end
   end
 end

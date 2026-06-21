@@ -1,8 +1,8 @@
 class Game < ApplicationRecord
   belongs_to :user
 
-  PLAYER_START_HP = 2000
-  CPU_START_HP = 2000
+  PLAYER_START_HP = 1500
+  CPU_START_HP = 1500
   HAND_SIZE = 5
   SINGLE_TARGET_EFFECTS = %w[enemy_monster self_monster].freeze
 
@@ -34,6 +34,7 @@ class Game < ApplicationRecord
         "player_field" => [],
         "cpu_field" => [],
         "pending_spell_id" => nil,
+        "pending_attacker_index" => nil,
         "turn" => first_turn,
         "log" => [first_turn == "player" ? "あなたが先攻です！" : "相手が先攻です！"]
       }
@@ -102,6 +103,38 @@ class Game < ApplicationRecord
       # 魔法は select_spell 経由で発動するのでここでは何もしない
       select_spell(card_id)
     end
+  end
+
+  def select_attacker(attacker_index)
+    return unless turn == "player"
+    return if state["turn_count"] == 1
+    attacker = state["player_field"][attacker_index]
+    return if attacker.nil? || attacker["attacked"]
+
+    if state["cpu_field"].empty?
+    # 相手フィールドが空なら対象選択不要で即直接攻撃
+      attack(attacker_index)
+    else
+      state["pending_attacker_index"] = attacker_index
+      save!
+    end
+  end
+
+  def pending_attacker
+    return nil if state["pending_attacker_index"].nil?
+    state["player_field"][state["pending_attacker_index"]]
+  end
+
+  def confirm_attack_target(target_index)
+    return if state["pending_attacker_index"].nil?
+    attacker_index = state["pending_attacker_index"]
+    state["pending_attacker_index"] = nil
+    attack(attacker_index, target_index)
+  end
+
+  def cancel_attack
+    state["pending_attacker_index"] = nil
+    save!
   end
 
   def attack(attacker_index, target_index = nil)

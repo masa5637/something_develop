@@ -6,7 +6,7 @@
     </div>
     <%= button_to "ターン終了", end_turn_game_path(@game),
           method: :post,
-          disabled: @game.turn != "player" || @game.finished? || @game.pending_spell,
+          disabled: @game.turn != "player" || @game.finished? || @game.pending_spell || @game.pending_attacker,
           class: "end-btn",
           form: { style: "display:inline;" } %>
   </div>
@@ -19,10 +19,10 @@
         <div class="pname">相手プレイヤー</div>
         <div class="hp-row">
           <div class="hp-bar-bg">
-            <div class="hp-bar-fill <%= @game.cpu_hp <= 600 ? 'low' : @game.cpu_hp <= 1200 ? 'mid' : 'high' %>"
-                 style="width: <%= [[(@game.cpu_hp.to_f / 2000 * 100), 0].max, 100].min %>%"></div>
+            <div class="hp-bar-fill <%= @game.cpu_hp <= 350 ? 'low' : @game.cpu_hp <= 750 ? 'mid' : 'high' %>"
+                 style="width: <%= [[(@game.cpu_hp.to_f / 1500 * 100), 0].max, 100].min %>%"></div>
           </div>
-          <div class="hp-num"><%= [@game.cpu_hp, 0].max %> / 2000</div>
+          <div class="hp-num"><%= [@game.cpu_hp, 0].max %> / 1500</div>
         </div>
       </div>
     </div>
@@ -32,12 +32,12 @@
         <div class="zone-label">相手 モンスターゾーン</div>
         <div class="zone-cards">
           <% @game.cpu_field_monsters.each do |m| %>
-            <% targetable = @game.pending_spell && @game.pending_spell.effect_target == "enemy_monster" %>
+            <% spell_targetable = @game.pending_spell && @game.pending_spell.effect_target == "enemy_monster" %>
+            <% attack_targetable = @game.pending_attacker %>
 
-            <% if targetable %>
+            <% if spell_targetable %>
               <%= button_to confirm_spell_target_game_path(@game, target_index: m[:index]),
-                    method: :post,
-                    class: "fcard-button" do %>
+                    method: :post, class: "fcard-button" do %>
                 <div class="fcard targetable">
                   <div class="fcard-img">
                     <% if m[:card].image.attached? %>
@@ -50,7 +50,29 @@
                     <div class="fcard-name"><%= m[:card].name %></div>
                     <div class="fcard-stats">
                       <span class="fstat a">A:<%= m[:card].attack %></span>
-                      <span class="fstat d">HP:<%= m[:current_hp] %></span>
+                      <span class="fstat de">D:<%= m[:card].defense %></span>
+                      <span class="fstat hp">HP:<%= m[:current_hp] %></span>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <% elsif attack_targetable %>
+              <%= button_to confirm_attack_target_game_path(@game, target_index: m[:index]),
+                    method: :post, class: "fcard-button" do %>
+                <div class="fcard targetable">
+                  <div class="fcard-img">
+                    <% if m[:card].image.attached? %>
+                      <%= image_tag m[:card].image, class: "card-img-tag" %>
+                    <% else %>
+                      <span class="fcard-rune">⬡</span>
+                    <% end %>
+                  </div>
+                  <div class="fcard-footer">
+                    <div class="fcard-name"><%= m[:card].name %></div>
+                    <div class="fcard-stats">
+                      <span class="fstat a">A:<%= m[:card].attack %></span>
+                      <span class="fstat de">D:<%= m[:card].defense %></span>
+                      <span class="fstat hp">HP:<%= m[:current_hp] %></span>
                     </div>
                   </div>
                 </div>
@@ -68,7 +90,8 @@
                   <div class="fcard-name"><%= m[:card].name %></div>
                   <div class="fcard-stats">
                     <span class="fstat a">A:<%= m[:card].attack %></span>
-                    <span class="fstat d">HP:<%= m[:current_hp] %></span>
+                    <span class="fstat de">D:<%= m[:card].defense %></span>
+                    <span class="fstat hp">HP:<%= m[:current_hp] %></span>
                   </div>
                 </div>
               </div>
@@ -93,6 +116,11 @@
         <span class="sp"><%= @game.pending_spell.name %></span>の対象を選んでください
         <%= button_to "キャンセル", cancel_spell_game_path(@game), method: :post, class: "card-edit-link", form: { style: "display:inline-block; margin-left:8px;" } %>
       </div>
+    <% elsif @game.pending_attacker %>
+      <div class="log-strip">
+        攻撃対象のモンスターを選んでください
+        <%= button_to "キャンセル", cancel_attack_game_path(@game), method: :post, class: "card-edit-link", form: { style: "display:inline-block; margin-left:8px;" } %>
+      </div>
     <% else %>
       <div class="log-strip"><%= @game.log.last %></div>
     <% end %>
@@ -103,11 +131,11 @@
         <div class="zone-cards">
           <% @game.player_field_monsters.each do |m| %>
             <% self_targetable = @game.pending_spell && @game.pending_spell.effect_target == "self_monster" %>
+            <% is_pending_attacker = @game.state["pending_attacker_index"] == m[:index] %>
 
             <% if self_targetable %>
               <%= button_to confirm_spell_target_game_path(@game, target_index: m[:index]),
-                    method: :post,
-                    class: "fcard-button" do %>
+                    method: :post, class: "fcard-button" do %>
                 <div class="fcard targetable">
                   <div class="fcard-img">
                     <% if m[:card].image.attached? %>
@@ -120,22 +148,18 @@
                     <div class="fcard-name"><%= m[:card].name %></div>
                     <div class="fcard-stats">
                       <span class="fstat a">A:<%= m[:card].attack %></span>
-                      <span class="fstat d">HP:<%= m[:current_hp] %></span>
+                      <span class="fstat de">D:<%= m[:card].defense %></span>
+                      <span class="fstat hp">HP:<%= m[:current_hp] %></span>
                     </div>
                   </div>
                 </div>
               <% end %>
             <% else %>
-              <% first_cpu_target = @game.cpu_field_monsters.first %>
-              <%= button_to attack_game_path(
-                    @game,
-                    attacker_index: m[:index],
-                    target_index: first_cpu_target ? first_cpu_target[:index] : nil
-                  ),
-                  method: :post,
-                  disabled: m[:attacked] || @game.turn != "player" || @game.finished? || @game.pending_spell,
-                  class: "fcard-button" do %>
-                <div class="fcard <%= 'attacked' if m[:attacked] %>">
+              <%= button_to select_attacker_game_path(@game, attacker_index: m[:index]),
+                    method: :post,
+                    disabled: m[:attacked] || @game.turn != "player" || @game.finished? || @game.pending_spell,
+                    class: "fcard-button" do %>
+                <div class="fcard <%= 'attacked' if m[:attacked] %> <%= 'selected-attacker' if is_pending_attacker %>">
                   <div class="fcard-img">
                     <% if m[:card].image.attached? %>
                       <%= image_tag m[:card].image, class: "card-img-tag" %>
@@ -147,7 +171,8 @@
                     <div class="fcard-name"><%= m[:card].name %></div>
                     <div class="fcard-stats">
                       <span class="fstat a">A:<%= m[:card].attack %></span>
-                      <span class="fstat d">HP:<%= m[:current_hp] %></span>
+                      <span class="fstat de">D:<%= m[:card].defense %></span>
+                      <span class="fstat hp">HP:<%= m[:current_hp] %></span>
                     </div>
                   </div>
                 </div>
@@ -168,10 +193,10 @@
         <div class="pname">あなた</div>
         <div class="hp-row">
           <div class="hp-bar-bg">
-            <div class="hp-bar-fill <%= @game.player_hp <= 600 ? 'low' : @game.player_hp <= 1200 ? 'mid' : 'high' %>"
-                 style="width: <%= [[(@game.player_hp.to_f / 2000 * 100), 0].max, 100].min %>%"></div>
+            <div class="hp-bar-fill <%= @game.player_hp <= 350 ? 'low' : @game.player_hp <= 750 ? 'mid' : 'high' %>"
+                 style="width: <%= [[(@game.player_hp.to_f / 1500 * 100), 0].max, 100].min %>%"></div>
           </div>
-          <div class="hp-num"><%= [@game.player_hp, 0].max %> / 2000</div>
+          <div class="hp-num"><%= [@game.player_hp, 0].max %> / 1500</div>
         </div>
       </div>
     </div>
@@ -185,7 +210,7 @@
         <% path = card.monster? ? play_card_game_path(@game, card_id: card.id) : select_spell_game_path(@game, card_id: card.id) %>
         <%= button_to path,
               method: :post,
-              disabled: @game.turn != "player" || @game.finished? || @game.pending_spell,
+              disabled: @game.turn != "player" || @game.finished? || @game.pending_spell || @game.pending_attacker,
               class: "hcard-button" do %>
           <div class="hcard <%= 'spell-card' if card.spell? %>">
             <div class="hcard-img <%= card.monster? ? 'monster' : 'spell' %>">

@@ -46,9 +46,15 @@ hard_cards = [
   find_or_build_card(cpu_user, "冥府の騎士",   card_type: "monster", tier: 300, attack: 150, defense: 150),
   find_or_build_card(cpu_user, "深淵の魔導士", card_type: "monster", tier: 200, attack: 160, defense: 40),
   find_or_build_card(cpu_user, "鋼鉄の守護者", card_type: "monster", tier: 200, attack: 60,  defense: 140),
+  find_or_build_card(cpu_user, "鋼鉄の守護者", card_type: "monster", tier: 200, attack: 60,  defense: 140),
+  find_or_build_card(cpu_user, "鋼鉄の守護者", card_type: "monster", tier: 200, attack: 60,  defense: 140),
+  find_or_build_card(cpu_user, "鋼鉄の守護者", card_type: "monster", tier: 150, attack: 100,  defense: 50),
   find_or_build_card(cpu_user, "破滅の一撃",   card_type: "spell", effect_target: "enemy_monster", effect_action: "destroy"),
   find_or_build_card(cpu_user, "暗黒の波動",   card_type: "spell", effect_target: "enemy_player",  effect_action: "damage", effect_value: 50),
+  find_or_build_card(cpu_user, "中出し", card_type: "spell", effect_target: "enemy_player", effect_action: "destroy",)
+  find_or_build_card(cpu_user, "中出し", card_type: "spell", effect_target: "enemy_player", effect_action: "destroy",)
 ]
+
 
 # ---- 難易度ごとのデッキ作成 ----
 def find_or_build_deck(user, name, cards)

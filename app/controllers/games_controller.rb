@@ -42,6 +42,21 @@ class GamesController < ApplicationController
     redirect_to game_path(@game)
   end
 
+  def select_attacker
+    @game.select_attacker(params[:attacker_index].to_i)
+    redirect_to game_path(@game)
+  end
+
+  def confirm_attack_target
+    @game.confirm_attack_target(params[:target_index].to_i)
+    redirect_to game_path(@game)
+  end
+
+  def cancel_attack
+    @game.cancel_attack
+    redirect_to game_path(@game)
+  end
+
   private
 
   def set_game
